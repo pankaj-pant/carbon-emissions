@@ -1,11 +1,13 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState} from 'react';
 import './App.css';
 import axios from 'axios';
+import Chart from './Chart'
 
 const App = () => {
   const [country, setCountry] = useState("")
   const [population, setPopulation] = useState([])
   const [emissions, setEmissions] = useState([])
+  const [years, setYears] = useState([])
 
   const handleChange = (event) => {
     setCountry(event.target.value)
@@ -21,6 +23,8 @@ const App = () => {
         console.log(response.data)
         const populationArray = response.data[1].map(c => c.value)
         setPopulation(populationArray)
+        const yearsArray = response.data[1].map(c => c.date)
+        setYears(yearsArray)
       })
     axios.get(`https://api.worldbank.org/v2/country/${country}/indicator/EN.ATM.CO2E.KT?format=json`)
     .then((response) => {
@@ -43,6 +47,7 @@ const App = () => {
         <input type="submit" value="submit"></input>
       </form>
       {population.length === 0 ? null : result()}
+      <Chart years={years} emissions={emissions} population={population}/>
     </div>
   )
 }
