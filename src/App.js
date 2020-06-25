@@ -5,6 +5,7 @@ import Chart from './Chart'
 
 const App = () => {
   const [country, setCountry] = useState("")
+  const [countryName, setCountryName] = useState("")
   const [population, setPopulation] = useState([])
   const [emissions, setEmissions] = useState([])
   const [years, setYears] = useState([])
@@ -25,6 +26,8 @@ const App = () => {
         setPopulation(populationArray)
         const yearsArray = response.data[1].map(c => c.date)
         setYears(yearsArray)
+        const name = response.data[1][0].country.value
+        setCountryName(name)
       })
     axios.get(`https://api.worldbank.org/v2/country/${country}/indicator/EN.ATM.CO2E.KT?format=json`)
     .then((response) => {
@@ -35,7 +38,13 @@ const App = () => {
   }
   const result = () => {
     return (
-      <p>CO2 emissions per capita (2014): {((emissions[5] / population[5]) * 1000).toFixed(1)} tons per capita</p>
+      <div>
+        <p>CO2 emissions per capita (2014): {countryName} emits {" "}
+         {((emissions[5] / population[5]) * 1000).toFixed(1)} tons of CO2 per capita in a year.
+        </p>
+        <Chart years={years} emissions={emissions} population={population} countryName={countryName}/>
+      </div>
+      
     )
   }
   return (
@@ -47,7 +56,6 @@ const App = () => {
         <input type="submit" value="submit"></input>
       </form>
       {population.length === 0 ? null : result()}
-      <Chart years={years} emissions={emissions} population={population}/>
     </div>
   )
 }

@@ -1,7 +1,7 @@
 import React from 'react';
 import Plot from 'react-plotly.js';
 
-const Chart = ({years, emissions, population}) => {
+const Chart = ({years, emissions, population, countryName}) => {
 
     return (
       <Plot
@@ -14,12 +14,13 @@ const Chart = ({years, emissions, population}) => {
             marker: {color: 'red'},
             name: 'population'
           },
-          {type: 'bar', x: years, y: emissions, yaxis: 'y2', name: 'emissions'},
+          {type: 'bar', x: years, y: emissions, yaxis: 'y2', name: 'emissions', marker: {color: 'grey'}},
         ]}
         layout={ {
             width: 1020, 
-            height: 640, 
-            title: 'Population & Emissions (1970-2014)',
+            height: 640,
+            legend: {"orientation": "h"}, 
+            title: `Population & Emissions for ${countryName} (1970-2014)`,
             yaxis: {title: 'population',
             overlaying: 'y2',
             side: 'right'},
